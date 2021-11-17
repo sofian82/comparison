@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>GFS-UKMO</title>
+  <style>
+   body{ 
+     font-family: Arial, Helvetica, sans-serif
+   }
+   .tajuk-model{
+     float:left;
+   }
+   .model{
+     float:left;
+   }
+   #gfs-img{
+    position: relative;
+   }
+   .imej-gfs {
+    position: absolute;
+    z-index: -1;
+   }
+   .overlay-img-gfs {
+     position: absolute;
+     opacity:0.5;
+     z-index: 1;
+   }
+   #ukm-img{
+     position: relative;
+   }
+   .imej-ukm {
+    position: absolute;
+    z-index: -1;
+   }
+   .overlay-img-ukm {
+     position: absolute;
+     opacity:0.5;
+     z-index: 1;
+   }
+   #desc-initial{
+     padding-right: 20px;
+   }
+   #desc-valid{
+     padding-right: 20px;
+   }
+   #desc-param{
+     padding-right: 20px;
+   }
+   #loader-con{
+     width: 100%;
+//     height: 130px;
+   }
+   #loading-div{
+     visibility:hidden;
+     margin-left: auto;
+     margin-right: auto;
+     margin-top: 60px;
+     border: 16px solid #f3f3f3;
+     border-radius: 50%;
+//     border-top: 16px solid #3498db;
+     border-top: 16px solid red;
+//     border-bottom: 16px solid #3498db;
+     border-bottom: 16px solid red;
+     width: 20px;
+     height: 20px;
+     -webkit-animation: spin 2s linear infinite; /* safari */
+     animation: spin 2s linear inifinite;
+   }
+   @keyframes spin {
+     0% { transform: rotate(0deg); }
+     100% { transform: rotate(360deg); }
+   }
+   @-webkit-keyframes spin {
+     0% { -webkit-transform: rotate(0deg); }
+     100% { -webkit-transform: rotate(360deg); }
+   }
+   .upper{
+     float: left;
+     width: 100%
+   }
+   .opalev{
+     font-size: 15px;
+     margin-left: 10px;
+     width: 200px;
+   }
+   #opacslide1 {
+//     visibility: hidden;
+     display: none;
+   }
+   #opacslide2 {
+      display: none;
+   }
+   .slideopac {
+      width:200px;
+      float: left;
+      font-size: 15px;
+      text-align: center;
+      border: 1px solid #aaaaaa;
+      border-radius: 5px;
+      margin: 5px;
+      background-color: #f5f5f5;
+   }
+   .buttondiv {
+      float:left;
+   }
+   .canvas-gfs {
+     position: absolute;
+     left: 0;
+     top: 0;
+   }
+   .canvas-ukmo {
+     position: absolute;
+     left: 0;
+     top: 0;
+   }
+   #gfs-canvas {
+     z-index: 0;
+   }
+   #gfs-canvas-overlay {
+     z-index: 1;
+   }
+  </style>
+</head>
+<body>
+  <div class="upper">
+    <div class="buttondiv">
+    <select id="tarikh">   
+    </select> 
+
+    <select id="domain">
+     <option value="domain">Domain
+     <!--<option value="9KM">9KM -->
+     <option value="3KM">3KM
+     <option value="PM">1KM(Peninsular)
+     <option value="SS">1KM(Sabah/Sarawak)
+    </select>
+
+    <select id="parameter">
+     <option value="parameter">Parameter
+     <option value="wind">Wind
+     <option value="precipitation">Precipitation
+     <option value="precipt">Precipitation Thresholds
+     <option value="temperature">Temperature
+     <option value="rh">Relative Humidity
+     <option value="maxtemp">Daily Maximum Temperature
+     <option value="heatwave">Heatwave
+    </select>
+
+    <select id="skip">
+     <option value="hourly">Hourly
+     <option value="1h">1 Hourly
+     <option value="3h">3 Hourly
+     <option value="6h">6 Hourly
+     <option value="12h">12 Hourly
+     <option value="24h">24 Hourly
+    </select>
+
+    <select id="height">
+     <option value="level">Level
+     <option value="surface">Surface
+     <option value="1000hpa">1000 hpa
+     <option value="850hpa">850 hpa
+     <option value="700hpa">700 hpa
+     <option value="500hpa">500 hpa
+     <option value="200hpa">200 hpa
+    </select>
+
+    <select id="overlay1">
+     <option value="overlay-no">1st overlay 
+     <option value="overlay-wind-surface">Wind-Surface
+     <option value="overlay-wind-1000hpa">Wind-1000hpa
+     <option value="overlay-wind-850hpa">Wind-850hpa
+     <option value="overlay-wind-700hpa">Wind-700hpa
+     <option value="overlay-wind-500hpa">Wind-500hpa
+     <option value="overlay-wind-200hpa">Wind-200hpa
+    </select>
+
+    <select id="overlay2">
+      <option value="overlay-no">2nd overlay
+      <option value="overlay-wind-surface">Wind-Surface
+      <option value="overlay-wind-1000hpa">Wind-1000hpa
+      <option value="overlay-wind-850hpa">Wind-850hpa
+      <option value="overlay-wind-700hpa">Wind-700hpa
+      <option value="overlay-wind-500hpa">Wind-500hpa
+      <option value="overlay-wind-200hpa">Wind-200hpa
+    </select>
+
+    <select hidden disabled id="overlay3">
+     <option value="overlay-no">3rd overlay
+     <option value="overlay-wind-surface">Wind-Surface
+     <option value="overlay-wind-1000hpa">Wind-1000hpa
+     <option value="overlay-wind-850hpa">Wind-850hpa
+     <option value="overlay-wind-700hpa">Wind-700hpa
+     <option value="overlay-wind-500hpa">Wind-500hpa
+     <option value="overlay-wind-200hpa">Wind-200hpa
+    </select>
+
+
+    <button type="button" id="prev"><</button>
+    <button type="button" id="next">></button>
+    <button type="button" id="play-backward">&#9668</button>
+    <button type="button" id="play-stop">&#10074;&#10074</button>
+    <button type="button" id="play-forward">&#9658</button>
+    <button type="button" id="first-step"><<</button>
+    <button type="button" id="last-step">>></button>
+    </div>
+
+    <div id="divopac1" class="slideopac"><span>Image Opacity</span> 
+    <input type="range" min="1" max="11" step="1" name="opac" id="opacslide1"/></div>
+    <div id="divopac2" class="slideopac"><span>Overlay image Opacity</span> 
+    <input type="range" min="1" max="11" step="1" name="opac" id="opacslide2"/></div>
+
+    <select id="radar">
+     <option value="verification">WRF-GFS | WRF-UKMO
+     <option value="gfs-radar">WRF-GFS | RADAR
+     <option value="ukmo-radar">WRF-UKMO | RADAR
+    </select>
+
+  </div>
+  </br>
+  </br>
+  <div id="description">
+   <span id="desc-param"></span>
+   <span id="desc-initial"></span>
+   <span id="desc-valid"></span>
+   <span id="desc-hours"></span>
+  </div>
+  </br>
+  <!--<div id="tajuk">
+    <div class="tajuk-model"><span>WRF-GFS</span></div>
+    <div class="tajuk-model"><span>WRF-UKMO</span></div>
+  </div>-->
+  <div id="gfs-con" class="model">
+   <div id="gfs-header"><span>WRF-GFS</span></div>
+   <div id="gfs-img">
+<!--    <canvas id="gfs-canvas" class="canvas-gfs"></canvas>
+    <canvas id="gfs-canvas-overlay1" class="canvas-gfs"></canvas> -->
+   </div>
+  </div>
+  <div id="ukm-con" class="model">
+   <div id="ukm-header"><span>WRF-UKMO</span></div>
+   <div id="ukm-img">
+<!--    <canvas id="ukmo-canvas" class="canvas-ukmo"></canvas>
+    <canvas id="ukmo-canvas-overlay1" class="canvas-ukmo"></canvas> -->
+   </div>
+  </div>
+  <div id="loader-con">
+    <div id="loading-div">
+  </div>
+  </div>
+  <script src="initial.js"></script>
+  <script src="myscript_dev.js"></script>
+  <script src="radar.js"></script>
+</body>
+</html>
