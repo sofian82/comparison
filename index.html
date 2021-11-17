@@ -141,6 +141,16 @@
      <option value="wind">Wind
      <option value="precipitation">Precipitation
      <option value="precipt">Precipitation Thresholds
+     <option value="lagens050">3-Day Lag. Ens. 24h-Precipitation Over 50mm
+     <option value="lagens100">3-Day Lag. Ens. 24h-Precipitation Over 100mm
+     <option value="lagens150">3-Day Lag. Ens. 24h-Precipitation Over 150mm
+     <option value="lagens200">3-Day Lag. Ens. 24h-Precipitation Over 200mm
+     <option value="lagens250">3-Day Lag. Ens. 24h-Precipitation Over 250mm
+     <option value="lagens7d050">7-Day Lag. Ens. 24h-Precipitation Over 50mm
+     <option value="lagens7d100">7-Day Lag. Ens. 24h-Precipitation Over 100mm
+     <option value="lagens7d150">7-Day Lag. Ens. 24h-Precipitation Over 150mm
+     <option value="lagens7d200">7-Day Lag. Ens. 24h-Precipitation Over 200mm
+     <option value="lagens7d250">7-Day Lag. Ens. 24h-Precipitation Over 250mm
      <option value="temperature">Temperature
      <option value="rh">Relative Humidity
      <option value="maxtemp">Daily Maximum Temperature
@@ -213,8 +223,10 @@
 
     <select id="radar">
      <option value="verification">WRF-GFS | WRF-UKMO
-     <option value="gfs-radar">WRF-GFS | RADAR
-     <option value="ukmo-radar">WRF-UKMO | RADAR
+     <option value="gfs-radar">WRF-GFS | RADAR-DBZ
+     <option value="gfs-radarain">WRF-GFS | RADAR-RAIN
+     <option value="ukmo-radar">WRF-UKMO | RADAR-DBZ
+     <option value="ukmo-radarain">WRF-UKMO | RADAR-RAIN
     </select>
 
   </div>
@@ -250,7 +262,7 @@
   </div>
   </div>
   <script src="initial.js"></script>
-  <script src="myscript_dev.js"></script>
+  <script src="myscript_radar.js"></script>
   <script src="radar.js"></script>
 </body>
 </html>
